@@ -40,7 +40,7 @@ import java.util.Arrays;
 
 public class Main {
     static final int size = 10000000;
-    static final int h = size / 4;
+    static final int h = size / 2;
     static float[] arr = new float[size];
 
     public static void main(String[] args) {
