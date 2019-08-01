@@ -6,7 +6,7 @@ import Lesson_02.exception.MyArraySizeException;
 public class Main {
 
     public static void main(String[] args) {
-        String[][] arrayForWork=  {{"1","1","1","0"}, {"3","4","1","1"}};
+        String[][] arrayForWork=  {{"1","1","1","0"}, {"3","4","1","1"}, {"3","4","1","1"}, {"3","4","1","1"}};
         int result = 0;
         try {
             result = doWork(arrayForWork);
@@ -19,8 +19,10 @@ public class Main {
 
     }
     private static int doWork (String[][] arrayForWork) throws MyArrayDataException,MyArraySizeException {
-        if (arrayForWork[0].length != 4 || arrayForWork[1].length != 4) {
-            throw new MyArraySizeException ("Величина массива не может быть больше 4х элементов", arrayForWork[0].length  , arrayForWork[1].length );
+        for (int i = 0; i < arrayForWork.length; i++){
+            if (arrayForWork.length != 4|| arrayForWork[i].length != 4) {
+                throw new MyArraySizeException ("Величина массива не может быть больше 4х элементов", arrayForWork.length  , arrayForWork[i].length );
+            }
         }
         int sum = 0;
         for (int i = 0; i < arrayForWork.length; i ++) {
