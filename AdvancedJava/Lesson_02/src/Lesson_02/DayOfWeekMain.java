@@ -1,6 +1,6 @@
 package Lesson_02;
 
-public class Enum {
+public class DayOfWeekMain {
 
     public static void main(final String[] args) {
         System.out.println(getWorkingHours(DayOfWeek.WEDNESDAY));
