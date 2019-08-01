@@ -25,7 +25,7 @@ public class ClientHandler {
                         while (true) {
                             String str = in.readUTF();
                             System.out.println("Client " + str);
-                            if (str.equals("/end")) {
+                            if (str.contains("/end")) {
                                 out.writeUTF("/serverClosed");
                                 break;
                             }
@@ -47,7 +47,7 @@ public class ClientHandler {
                         try {
                             socket.close();
                             System.out.println("socket closed");
-                            //server.deleteClient(this);
+                            server.deleteClient();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -68,4 +68,7 @@ public class ClientHandler {
         }
     }
 
+    public Socket getSocket() {
+        return socket;
+    }
 }

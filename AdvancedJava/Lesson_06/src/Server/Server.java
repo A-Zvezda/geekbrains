@@ -42,10 +42,17 @@ public class Server {
 
     public void broadcastMsg(String msg) {
         for (ClientHandler o: clients) {
-            o.sendMsg(msg);
+            if(!o.getSocket().isClosed()) {
+                o.sendMsg(msg);
+            }
         }
     }
-    public void deleteClient (Runnable clientHandler) {
-        clients.remove(clientHandler);
+    public void deleteClient () {
+
+        for (ClientHandler o: clients) {
+            if(!o.getSocket().isClosed()) {
+                clients.remove(o);
+            }
+        }
     }
 }
