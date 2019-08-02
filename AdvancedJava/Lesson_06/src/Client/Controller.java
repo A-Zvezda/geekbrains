@@ -9,6 +9,7 @@ import javafx.stage.WindowEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.URL;
@@ -65,7 +66,11 @@ public class Controller implements Initializable {
                 }
             }).start();
 
-        } catch (IOException e) {
+        } catch (ConnectException e) {
+            textArea.appendText("Server not found");
+            e.printStackTrace();
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -85,8 +90,10 @@ public class Controller implements Initializable {
     }
     public void sendMsg(String msg) {
         try {
-            if (!msg.isEmpty() & !socket.isClosed()) {
-                out.writeUTF(textFieldUserName.getText() + ": " + msg);
+            if (socket!=null) {
+                if (!msg.isEmpty() & !socket.isClosed()) {
+                    out.writeUTF(textFieldUserName.getText() + ": " + msg);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
