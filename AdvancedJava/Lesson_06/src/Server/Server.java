@@ -21,6 +21,7 @@ public class Server {
             while (true) {
                 socket = server.accept();
                 clients.add(new ClientHandler(this, socket));
+                checkClients();
             }
 
         } catch (IOException e) {
@@ -44,14 +45,18 @@ public class Server {
         for (ClientHandler o: clients) {
             if(!o.getSocket().isClosed()) {
                 o.sendMsg(msg);
+            } else {
+                deleteClient(o);
             }
         }
     }
-    public void deleteClient () {
-
+    public void deleteClient (ClientHandler clientHandler) {
+        clients.remove(clientHandler);
+    }
+    public void checkClients() {
         for (ClientHandler o: clients) {
-            if(!o.getSocket().isClosed()) {
-                clients.remove(o);
+            if(o.getSocket().isClosed()) {
+                deleteClient(o);
             }
         }
     }

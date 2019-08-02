@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ClientHandler {
     private Socket socket;
@@ -26,12 +27,20 @@ public class ClientHandler {
                             String str = in.readUTF();
                             System.out.println("Client " + str);
                             if (str.contains("/end")) {
-                                out.writeUTF("/serverClosed");
+                                System.out.println("Client close connection");
+                                out.writeUTF("/ConnectionClosed");
+                                break;
+                            } else if (str.contains("/AppClose")) {
+                                System.out.println("Client close application");
                                 break;
                             }
                             server.broadcastMsg(str);
                         }
-                    } catch (IOException e) {
+                    } catch (SocketException e) {
+                        System.out.println("Client time out...");
+                        e.printStackTrace();
+                    }
+                    catch (IOException e) {
                         e.printStackTrace();
                     } finally {
                         try {
@@ -46,8 +55,6 @@ public class ClientHandler {
                         }
                         try {
                             socket.close();
-                            System.out.println("socket closed");
-                            server.deleteClient();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

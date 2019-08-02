@@ -10,6 +10,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -43,16 +44,19 @@ public class Controller implements Initializable {
                 public void run() {
                     try {
                         while (true) {
-                            System.out.println(socket.isClosed());
-                           //in.
                             String str = in.readUTF();
                             textArea.appendText(str + "\n");
+                            if (str.equals("/serverClosed")) {
+                                break;
+                            }
                         }
+                    } catch (SocketException e) {
+                        textArea.appendText("Connection lost..." + "\n");
+                        e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
                     } finally {
                         try {
-                            out.writeUTF("/end");
                             socket.close();
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -66,12 +70,23 @@ public class Controller implements Initializable {
         }
     }
 
+
+
     public void sendMsg() {
         try {
             if (!textField.getText().isEmpty()) {
                 out.writeUTF(textFieldUserName.getText() + ": " + textField.getText());
                 textField.clear();
                 textField.requestFocus();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void sendMsg(String msg) {
+        try {
+            if (!msg.isEmpty() & !socket.isClosed()) {
+                out.writeUTF(textFieldUserName.getText() + ": " + msg);
             }
         } catch (IOException e) {
             e.printStackTrace();
