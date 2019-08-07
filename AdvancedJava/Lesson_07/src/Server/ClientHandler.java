@@ -29,11 +29,11 @@ public class ClientHandler {
                                 String[] tokens = str.split(" ");
                                 String newNick = AuthService.getNickByLoginAndPass(tokens[1], tokens[2]);
                                 if (newNick != null) {
-                                    if (server.checkUser(newNick)) {
+                                    nick = newNick;
+                                    if (server.checkUser(nick)) {
                                         sendMsg("Пользователь с такм ником уже в системе!");
                                     } else {
                                         sendMsg("/authok");
-                                        nick = newNick;
                                         server.subscribe(ClientHandler.this);
                                         break;
                                     }
@@ -51,8 +51,18 @@ public class ClientHandler {
                                 out.writeUTF("/serverClosed");
                                 break;
                             }
-                            if (tokens[1].equals("/w")) {
-                                server.privateMsg(str,tokens[2]);
+
+                                if (tokens[0].equals("/w") & tokens.length > 1) {
+                                   sendMsg(str);
+                                   StringBuilder builder = new StringBuilder();
+                                    for (int i = 2; i < tokens.length; i++) {
+                                        builder.append(tokens[i]);
+                                    }
+                                    str = builder.toString();
+                                    if (!server.privateMsg("От : " + nick + " : " + str, tokens[1])) {
+                                        sendMsg("Пользователь не найден!");
+                                    }
+
                             } else {
                                 server.broadcastMsg(nick + ": " + str);
                             }
@@ -99,5 +109,9 @@ public class ClientHandler {
     public String getNick() {
         String res = String.valueOf(nick);
         return res;
+    }
+
+    public Socket getSocket() {
+        return socket;
     }
 }

@@ -45,24 +45,33 @@ public class Server {
             AuthService.disconnect();
         }
     }
-    public boolean checkUser(String username) {
+    public boolean checkUser(String nick) {
         boolean res = false;
         for (ClientHandler o: clients) {
-            res = o.getNick().equals(username);
+            if (o.getNick().equals(nick)) {
+                res = true;
+            }
         }
         return res;
     }
     public void broadcastMsg(String msg) {
         for (ClientHandler o: clients) {
-            o.sendMsg(msg);
+            if(!o.getSocket().isClosed()) {
+                o.sendMsg(msg);
+            } else {
+                unsubscribe(o);
+            }
         }
     }
-    public void privateMsg(String msg,String clientNick) {
+    public boolean privateMsg(String msg,String clientNick) {
+        boolean res = false;
         for (ClientHandler o: clients) {
             if (o.getNick().equals(clientNick)) {
                 o.sendMsg(msg);
+                res = true;
             }
         }
+        return res;
     }
 
     public void subscribe(ClientHandler client) {
