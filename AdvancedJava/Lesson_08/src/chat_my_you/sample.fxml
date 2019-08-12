@@ -8,13 +8,13 @@
 <?import javafx.scene.control.TextField?>
 
 <?import java.net.URL?>
-<?scenebuilder-stylesheet /css/Styles.css?>
+<?scenebuilder-stylesheet /Styles.css?>
 
 
 <?import javafx.scene.control.ScrollPane?>
 <VBox fx:controller="chat_my_you.Controller" xmlns:fx="http://javafx.com/fxml" alignment="center">
 
-    <stylesheets><URL value="chat_my_you/css/Styles.css"/></stylesheets>
+    <stylesheets><URL value="Styles.css"/></stylesheets>
 
     <VBox fx:id="VboxChat" VBox.vgrow="ALWAYS">
         <ScrollPane>

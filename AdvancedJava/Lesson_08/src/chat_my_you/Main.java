@@ -1,7 +1,8 @@
 package chat_my_you;
 
-import client.Controller;
+
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,7 +12,6 @@ public class Main extends Application {
     Controller c;
     @Override
     public void start(Stage primaryStage) throws Exception{
-
         FXMLLoader loader = new FXMLLoader();
         Parent root = loader.load(getClass().getResourceAsStream("sample.fxml"));
         c = loader.getController();
@@ -21,11 +21,11 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-
-//        Parent root = FXMLLoader.load(getClass().getResource("chat_my_you/sample.fxml"));
-//        primaryStage.setTitle("Hello World");
-//        primaryStage.setScene(new Scene(root, 300, 275));
-//        primaryStage.show();
+        primaryStage.setOnCloseRequest(event -> {
+            c.Dispose();
+            Platform.exit();
+            System.exit(0);
+        });
     }
 
     public static void main(String[] args) {

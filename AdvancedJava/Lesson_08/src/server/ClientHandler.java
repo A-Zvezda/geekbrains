@@ -36,14 +36,26 @@ public class ClientHandler {
                 @Override
                 public void run() {
                     try {
+
                         while (true) {
                             String str = in.readUTF();
+                            if (str.startsWith("/reg"))
+                            {
+                                String[] tokens = str.split(" ");
+                                if (AuthService.getLogin(tokens[1]) == null ) {
+                                    AuthService.setNewUsers(tokens[1],tokens[2],tokens[3]);
+                                    sendMsg("/regOk");
+                                } else {
+                                    sendMsg("Логин уже используется");
+                                }
+
+                            }
                             if (str.startsWith("/auth")) {
                                 String[] tokens = str.split(" ");
                                 String newNick = AuthService.getNickByLoginAndPass(tokens[1], tokens[2]);
                                 if (newNick != null) {
                                     if (!server.isNickBusy(newNick)) {
-                                        sendMsg("/authok");
+                                        sendMsg("/authok" + " " + newNick);
                                         nick = newNick;
                                         server.subscribe(ClientHandler.this);
                                         break;

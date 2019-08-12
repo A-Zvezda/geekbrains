@@ -11,7 +11,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -22,14 +23,24 @@ import java.util.logging.Handler;
 
 
 public class Controller {
-    @FXML
-    TextArea textArea;
+
 
     @FXML
     TextField textField;
 
     @FXML
-    Button btn1;
+    TextField newLoginField;
+
+    @FXML
+    TextField newNickFiled;
+
+    @FXML
+    TextField newPasswordField;
+    @FXML
+    TextField loginField;
+
+    @FXML
+    TextField passwordField;
 
     @FXML
     HBox bottomPanel;
@@ -38,10 +49,13 @@ public class Controller {
     HBox upperPanel;
 
     @FXML
-    TextField loginField;
+    HBox welcomePanel;
 
     @FXML
-    TextField passwordField;
+    HBox loginPanel;
+
+    @FXML
+    HBox regPanel;
 
     @FXML
     ListView<String> clientList;
@@ -51,6 +65,8 @@ public class Controller {
 
     private boolean isAuthorized;
     private int index = 0;
+    private String myNick;
+    private boolean inRegMode;
 
     public void setAuthorized(boolean isAuthorized) {
         this.isAuthorized = isAuthorized;
@@ -64,8 +80,12 @@ public class Controller {
         } else {
             upperPanel.setVisible(false);
             upperPanel.setManaged(false);
+            regPanel.setVisible(false);
+            regPanel.setManaged(false);
             bottomPanel.setVisible(true);
             bottomPanel.setManaged(true);
+            loginPanel.setVisible(false);
+            loginPanel.setManaged(false);
             clientList.setVisible(true);
             clientList.setManaged(true);
         }
@@ -89,15 +109,34 @@ public class Controller {
                 @Override
                 public void run() {
                     try {
+                        if (inRegMode) {
+                         while (true) {
+                              String str = in.readUTF();
+                              if (str.startsWith("/regOk")) {
+                                  inRegMode = false;
+                                  showLoginPanel();
+                                  addText("Успешно зарегистирован!");
+                                  break;
+                               } else {
+                                   addText(str);
+                              }
+                              if (!inRegMode) {
+                                  break;
+                              }
+                            }
+                        }
                         while (true) {
                             String str = in.readUTF();
                             if (str.startsWith("/authok")) {
                                 setAuthorized(true);
+                                String[] tokens = str.split(" ");
+                                myNick = tokens[1];
                                 break;
                             } else {
-                                textArea.appendText(str + "\n");
+                                addText(str);
                             }
                         }
+
 
                         while (true) {
                             String str = in.readUTF();
@@ -114,7 +153,7 @@ public class Controller {
                                     }
                                 });
                             } else {
-                                textArea.appendText(str + "\n");
+                                addText(str);
                             }
                         }
 
@@ -147,21 +186,6 @@ public class Controller {
     }
 
     public void sendMsg() {
-        /*
-         *
-         */
-        Label label = new Label(textField.getText() + "\n");
-        VBox vBox = new VBox();
-
-        if(index % 2 == 0) {
-            vBox.setAlignment(Pos.TOP_LEFT);
-        } else {
-            vBox.setAlignment(Pos.TOP_RIGHT);
-        }
-
-        vBox.getChildren().add(label);
-        VboxChat.getChildren().add(vBox);
-        index++;
         try {
             out.writeUTF(textField.getText());
             textField.clear();
@@ -191,6 +215,77 @@ public class Controller {
         }
     }
 
+    public void tryToReg() {
+        if(socket == null || socket.isClosed()) {
+            connect();
+        }
+        try {
+            out.writeUTF("/reg " + newLoginField.getText() + " " + newNickFiled.getText() + " " + newPasswordField.getText());
+            newLoginField.clear();
+            newNickFiled.clear();
+            passwordField.clear();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void cancelReg() {
+        inRegMode = false;
+        welcomePanel.setVisible(true);
+        welcomePanel.setManaged(true);
+        regPanel.setVisible(false);
+        regPanel.setManaged(false);
+        loginPanel.setVisible(false);
+        loginPanel.setManaged(false);
+    }
+    public void showLoginPanel() {
+        welcomePanel.setVisible(false);
+        welcomePanel.setManaged(false);
+        regPanel.setVisible(false);
+        regPanel.setManaged(false);
+        loginPanel.setVisible(true);
+        loginPanel.setManaged(true);
+    }
+    public void showRegPanel() {
+        inRegMode = true;
+        welcomePanel.setVisible(false);
+        welcomePanel.setManaged(false);
+        loginPanel.setVisible(false);
+        loginPanel.setManaged(false);
+        regPanel.setVisible(true);
+        regPanel.setManaged(true);
+    }
+    public void cancelAuth() {
+        welcomePanel.setVisible(true);
+        welcomePanel.setManaged(true);
+        loginPanel.setVisible(false);
+        loginPanel.setManaged(false);
+        regPanel.setVisible(false);
+        regPanel.setManaged(false);
+    }
+
+    private void addText (String msg) {
+
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                Label label = new Label(msg + "\n");
+                VBox vBox = new VBox();
+                if (myNick != null) {
+
+                    if(msg.startsWith(myNick)) {
+                       vBox.setAlignment(Pos.TOP_RIGHT);
+                    } else {
+                       vBox.setAlignment(Pos.TOP_LEFT);
+                    }
+                } else {
+                    vBox.setAlignment(Pos.TOP_LEFT);
+                }
+
+                vBox.getChildren().add(label);
+                VboxChat.getChildren().add(vBox);
+            }
+        });
+
+    }
 //    @FXML
 //    private void closeButtonAction(){
 //        // get a handle to the stage

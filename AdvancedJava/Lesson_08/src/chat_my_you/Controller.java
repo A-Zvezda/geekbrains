@@ -8,6 +8,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
+
 public class Controller {
 
     @FXML
@@ -19,21 +21,32 @@ public class Controller {
     int index = 0;
 
     public void sendMsg(ActionEvent actionEvent) {
-        Label label = new Label(textField.getText() + "\n");
-        VBox vBox = new VBox();
+//        Label label = new Label(textField.getText() + "\n");
+//        VBox vBox = new VBox();
+//
+//        if(index % 2 == 0) {
+//            vBox.setAlignment(Pos.TOP_LEFT);
+//        } else {
+//            vBox.setAlignment(Pos.TOP_RIGHT);
+//        }
+//
+//        vBox.getChildren().add(label);
+//        VboxChat.getChildren().add(vBox);
+//
+////       // textArea.appendText(textField.getText() + "\n");
+//        textField.clear();
+//        textField.requestFocus();
+//        index++;
+    }
 
-        if(index % 2 == 0) {
-            vBox.setAlignment(Pos.TOP_LEFT);
-        } else {
-            vBox.setAlignment(Pos.TOP_RIGHT);
-        }
-
-        vBox.getChildren().add(label);
-        VboxChat.getChildren().add(vBox);
-
-       // textArea.appendText(textField.getText() + "\n");
-        textField.clear();
-        textField.requestFocus();
-        index++;
+    public void Dispose() {
+        System.out.println("Отправляем сообщение о закрытии");
+//        try {
+//            if(out != null) {
+//                out.writeUTF("/end");
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 }
