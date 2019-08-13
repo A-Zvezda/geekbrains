@@ -61,7 +61,10 @@ public class Controller {
     ListView<String> clientList;
 
     @FXML
-    VBox VboxChat;
+    ListView<VBox> textArea;
+
+//    @FXML
+//    VBox VboxChat;
 
     private boolean isAuthorized;
     private int index = 0;
@@ -90,6 +93,43 @@ public class Controller {
             clientList.setManaged(true);
         }
     }
+    public void cancelReg() {
+        inRegMode = false;
+        welcomePanel.setVisible(true);
+        welcomePanel.setManaged(true);
+        regPanel.setVisible(false);
+        regPanel.setManaged(false);
+        loginPanel.setVisible(false);
+        loginPanel.setManaged(false);
+    }
+
+    public void showLoginPanel() {
+        welcomePanel.setVisible(false);
+        welcomePanel.setManaged(false);
+        regPanel.setVisible(false);
+        regPanel.setManaged(false);
+        loginPanel.setVisible(true);
+        loginPanel.setManaged(true);
+    }
+
+    public void showRegPanel() {
+        inRegMode = true;
+        welcomePanel.setVisible(false);
+        welcomePanel.setManaged(false);
+        loginPanel.setVisible(false);
+        loginPanel.setManaged(false);
+        regPanel.setVisible(true);
+        regPanel.setManaged(true);
+    }
+
+    public void cancelAuth() {
+        welcomePanel.setVisible(true);
+        welcomePanel.setManaged(true);
+        loginPanel.setVisible(false);
+        loginPanel.setManaged(false);
+        regPanel.setVisible(false);
+        regPanel.setManaged(false);
+    }
 
     Socket socket;
     DataInputStream in;
@@ -101,10 +141,8 @@ public class Controller {
     public void connect() {
         try {
             socket = new Socket(IP_ADRESS, PORT);
-
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
-
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -136,8 +174,6 @@ public class Controller {
                                 addText(str);
                             }
                         }
-
-
                         while (true) {
                             String str = in.readUTF();
                             if (str.equals("/serverclosed")) break;
@@ -211,7 +247,7 @@ public class Controller {
 
     public void selectClient(MouseEvent mouseEvent) {
         if(mouseEvent.getClickCount() == 2) {
-            System.out.println("Двойной клик");
+            textField.setText(textField.getText() + " " + clientList.getSelectionModel().getSelectedItem());
         }
     }
 
@@ -228,60 +264,24 @@ public class Controller {
             e.printStackTrace();
         }
     }
-    public void cancelReg() {
-        inRegMode = false;
-        welcomePanel.setVisible(true);
-        welcomePanel.setManaged(true);
-        regPanel.setVisible(false);
-        regPanel.setManaged(false);
-        loginPanel.setVisible(false);
-        loginPanel.setManaged(false);
-    }
-    public void showLoginPanel() {
-        welcomePanel.setVisible(false);
-        welcomePanel.setManaged(false);
-        regPanel.setVisible(false);
-        regPanel.setManaged(false);
-        loginPanel.setVisible(true);
-        loginPanel.setManaged(true);
-    }
-    public void showRegPanel() {
-        inRegMode = true;
-        welcomePanel.setVisible(false);
-        welcomePanel.setManaged(false);
-        loginPanel.setVisible(false);
-        loginPanel.setManaged(false);
-        regPanel.setVisible(true);
-        regPanel.setManaged(true);
-    }
-    public void cancelAuth() {
-        welcomePanel.setVisible(true);
-        welcomePanel.setManaged(true);
-        loginPanel.setVisible(false);
-        loginPanel.setManaged(false);
-        regPanel.setVisible(false);
-        regPanel.setManaged(false);
-    }
+
 
     private void addText (String msg) {
-
         Platform.runLater(new Runnable() {
             @Override public void run() {
                 Label label = new Label(msg + "\n");
                 VBox vBox = new VBox();
                 if (myNick != null) {
-
                     if(msg.startsWith(myNick)) {
-                       vBox.setAlignment(Pos.TOP_RIGHT);
+                        vBox.setAlignment(Pos.TOP_RIGHT);
                     } else {
-                       vBox.setAlignment(Pos.TOP_LEFT);
+                        vBox.setAlignment(Pos.TOP_LEFT);
                     }
                 } else {
                     vBox.setAlignment(Pos.TOP_LEFT);
                 }
-
                 vBox.getChildren().add(label);
-                VboxChat.getChildren().add(vBox);
+                textArea.getItems().add(vBox);
             }
         });
 

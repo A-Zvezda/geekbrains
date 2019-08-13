@@ -1,6 +1,8 @@
 package server;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class AuthService {
@@ -35,6 +37,37 @@ public class AuthService {
         return null;
     }
 
+    public static String getUserIDbyNick(String nick) {
+        String sql = String.format("SELECT id FROM main where nickname = '%s'", nick);
+
+        try {
+            ResultSet rs = stmt.executeQuery(sql);
+
+            if (rs.next()) {
+                String str = rs.getString(1);
+                return rs.getString(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static int setUserInBlackList(String userId, String userIdForBlock) {
+
+        String sql = String.format("INSERT INTO blackList (userId, userIdForBlock) VALUES (%s, %s)", userId, userIdForBlock);
+        int rs = 0;
+        try {
+            rs = stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            System.out.println(sql);
+            e.printStackTrace();
+        }
+
+        return rs;
+    }
 
     public static int setNewUsers(String login, String nick, String pass) {
         int hash = pass.hashCode();
@@ -50,6 +83,28 @@ public class AuthService {
 
         return rs;
     }
+
+    public static List<String> getBlackListByNickName(String nick) {
+        List<String> blackList = new ArrayList<>();
+        String sql = String.format("SELECT m.nickname\n" +
+                "FROM main \n" +
+                "LEFT JOIN blackList as bl\n" +
+                "ON main.id = bl.userId\n" +
+                "LEFT Join  main as m\t\n" +
+                "on m.id = bl.userIdForBlock\n" +
+                "WHERE main.nickname = '%s'", nick);
+        try {
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                blackList.add(rs.getString(1));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return blackList;
+    }
+
 
     public static String getNickByLoginAndPass(String login, String pass) {
         int hash = pass.hashCode();

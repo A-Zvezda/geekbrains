@@ -16,6 +16,7 @@ public class ClientHandler {
     private String nick;
     List<String> blackList;
 
+
     public String getNick() {
         return nick;
     }
@@ -23,6 +24,21 @@ public class ClientHandler {
     public boolean checkBlackList(String nick) {
         return blackList.contains(nick);
     }
+    public void fillBlackList() {
+        blackList = AuthService.getBlackListByNickName(nick);
+    }
+    public boolean addUserInBlackList(String nick) {
+        String blockUserId =  AuthService.getUserIDbyNick(nick);
+        String currentUserId =  AuthService.getUserIDbyNick(this.nick);
+        boolean res = false;
+        if (blockUserId != null) {
+            blackList.add(nick);
+            AuthService.setUserInBlackList(currentUserId,blockUserId);
+            res = true;
+        }
+        return res;
+    }
+
 
     public ClientHandler(Socket socket, Main server) {
         try {
@@ -68,7 +84,7 @@ public class ClientHandler {
                             }
                             server.broadcastMsg(ClientHandler.this, str);
                         }
-
+                        fillBlackList();
                         while (true) {
                             String str = in.readUTF();
                             if (str.startsWith("/")) {
@@ -85,8 +101,13 @@ public class ClientHandler {
                                 }
                                 if (str.startsWith("/blacklist ")) {
                                     String[] tokens = str.split(" ");
-                                    blackList.add(tokens[1]);
-                                    sendMsg("Вы добавили пользователя " + tokens[1] + " в черный список");
+                                    if (tokens[1].equals(nick)) {
+                                        sendMsg("Нельзя добавлять себя в чёрный список!");
+                                    } else if (addUserInBlackList(tokens[1]) ) {
+                                        sendMsg("Вы добавили пользователя " + tokens[1] + " в черный список");
+                                    } else {
+                                        sendMsg("Пользователь " + tokens[1] + " не найден");
+                                    }
                                 }
                             } else {
                                 server.broadcastMsg(ClientHandler.this,nick + ": " + str);

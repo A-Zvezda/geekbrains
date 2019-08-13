@@ -16,12 +16,10 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader();
         Parent root = loader.load(getClass().getResourceAsStream("sample.fxml"));
         c = loader.getController();
-
         primaryStage.setTitle("Chat 2k19");
         Scene scene = new Scene(root, 350, 350);
         primaryStage.setScene(scene);
         primaryStage.show();
-
         primaryStage.setOnCloseRequest(event -> {
             c.Dispose();
             Platform.exit();
