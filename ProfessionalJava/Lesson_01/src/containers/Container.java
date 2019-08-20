@@ -31,11 +31,13 @@ public abstract class Container <T extends Object>{
     }
 
     public void addItem(T item ) {
-        this.content.add(item);
+        content.add(item);
+   }
+    public void setContent (ArrayList <T> content) {
+        this.content = content;
     }
-
     public void removeItem (T item) {
-        this.content.remove(item);
+        content.remove(item);
     }
 
     public void setBoxID(String boxID) {
