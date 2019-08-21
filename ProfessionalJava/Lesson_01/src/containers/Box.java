@@ -32,7 +32,6 @@ public class Box <T extends Fruit> extends Container<T> {
         return i == j;
     }
     public void moveContent(Box<T> box) {
-
         ArrayList<T> content = box.getContent();
         for (T o:content) {
             this.addItem(o);
