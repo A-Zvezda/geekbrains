@@ -1,0 +1,7 @@
+﻿1. Добавить в сетевой чат авторизацию через базу данных SQLite.
+2.*Добавить в сетевой чат возможность смены ника.
+username  password
+nick1 	    pass
+nick2 	    pass
+nick3 	    pass
+user1 	    user1
