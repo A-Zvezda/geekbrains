@@ -9,6 +9,7 @@ public class Warehouse {
 
     public static void main(String[] args) {
 		boolean work = true;
+		Scanner userInput = new Scanner(System.in);
     	System.out.println("Начало работы с БД...");
 		DBProcessor.connection();
 		System.out.println("Создание таблицы...");
@@ -19,7 +20,6 @@ public class Warehouse {
 		DBProcessor.fillTable();
 		System.out.println("Добрый день, Пользовталь. У вас есть три комнады: /цена /сменитьцену /товарыпоцене /выход ");
 		do {
-			Scanner userInput = new Scanner(System.in);
 			String userInputData = userInput.nextLine();
 			String[] tokens = userInputData.split(" ");
 			if (tokens != null) {
@@ -38,7 +38,6 @@ public class Warehouse {
 					}
 					case "/выход": {
 						work = false;
-						System.out.println(work);
 						break;
 					}
 					default:
@@ -51,6 +50,8 @@ public class Warehouse {
 				System.out.println("Введите команду.");
 			}
 		} while (work);
+		DBProcessor.closeConnection();
+		userInput.close();
 	}
 
 	public static void changePrice(String[] tokens) {

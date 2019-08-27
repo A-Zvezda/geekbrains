@@ -20,6 +20,18 @@ public class DBProcessor {
             e.printStackTrace();
         }
     }
+    public static void closeConnection() {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void createTable () {
         String newTable = "CREATE TABLE IF NOT EXISTS Warehouse (\n" +
