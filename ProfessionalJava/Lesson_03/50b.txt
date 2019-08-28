@@ -1,5 +1,0 @@
-nick123: adad
-nick123: 1
-nick123: 2
-nick123: 3
-nick123: 3
