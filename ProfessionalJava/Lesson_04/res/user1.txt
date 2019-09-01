@@ -1,0 +1,9 @@
+nick2: adad
+nick2: asd
+user1: ads
+user1: ad
+user1: 564546
+user1: 456465
+user1: 45646
+nick2: 564654
+nick2: 456456
