@@ -38,9 +38,13 @@ public class Car implements Runnable {
             e.printStackTrace();
         }
         //System.out.println(Main.START.getCount());
-        for (int i = 0; i < race.getStages().size(); i++) {
-            race.getStages().get(i).go(this);
-            //Main.FINISH.countDown();
+        try {
+            for (int i = 0; i < race.getStages().size(); i++) {
+                race.getStages().get(i).go(this);
+                //Main.FINISH.countDown();
+            }
+        } finally {
+            Main.FINISH.countDown();
         }
     }
 }

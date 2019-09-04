@@ -30,7 +30,7 @@ public class Main {
         }
         executorService.shutdown();
         while (true) {
-            if (executorService.isShutdown()) {
+            if (FINISH.getCount() == 0) {
                 System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка закончилась!!!");
                 break;
             }
