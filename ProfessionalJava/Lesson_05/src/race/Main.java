@@ -28,13 +28,15 @@ public class Main {
                 break;
             }
         }
-        executorService.shutdown();
+
         while (true) {
             if (FINISH.getCount() == 0) {
                 System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка закончилась!!!");
                 break;
             }
         }
+
+        executorService.shutdown();
 
     }
 }
