@@ -1,6 +1,3 @@
-package track;
-import participant.Car;
-
 public abstract class Stage {
     protected int length;
     protected String description;

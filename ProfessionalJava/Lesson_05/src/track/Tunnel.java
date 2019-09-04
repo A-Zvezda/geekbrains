@@ -1,7 +1,3 @@
-package track;
-import participant.Car;
-
-
 public class Tunnel extends Stage {
     public Tunnel() {
         this.length = 80;
@@ -12,8 +8,27 @@ public class Tunnel extends Stage {
         try {
             try {
                 System.out.println(c.getName() + " готовится к этапу(ждет): " + description);
-                System.out.println(c.getName() + " начал этап: " + description);
-                Thread.sleep(length / c.getSpeed() * 1000);
+                Main.SEMAPHORE.acquire();
+
+                    int capacityNumber = -1;
+
+                    //Ищем свободное место и паркуемся
+                    synchronized (Main.TUNNEL_CAPACITY){
+                        for (int i = 0; i < Main.TUNNEL_CAPACITY.length; i++)
+                            if (!Main.TUNNEL_CAPACITY[i]) {      //Если место свободно
+                                Main.TUNNEL_CAPACITY[i] = true;  //занимаем его
+                                capacityNumber = i;         //Наличие свободного места, гарантирует семафор
+                                System.out.println(c.getName() + " начал этап: " + description);
+                                break;
+                            }
+                        synchronized (Main.TUNNEL_CAPACITY) {
+                            Main.TUNNEL_CAPACITY[capacityNumber] = false;//Освобождаем место
+                        }
+
+                        Main.SEMAPHORE.release();
+
+                    }
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
