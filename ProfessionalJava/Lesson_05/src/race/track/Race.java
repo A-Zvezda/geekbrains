@@ -1,4 +1,4 @@
-package track;
+package race.track;
 
 import java.util.ArrayList;
 import java.util.Arrays;

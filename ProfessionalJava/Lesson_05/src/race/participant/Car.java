@@ -1,6 +1,7 @@
-package participant;
-import Main;
-import track.*;
+package race.participant;
+
+import race.track.*;
+import race.Main;
 
 
 public class Car implements Runnable {

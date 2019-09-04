@@ -1,3 +1,9 @@
+package race.track;
+
+
+import race.Main;
+import race.participant.*;
+
 public class Tunnel extends Stage {
     public Tunnel() {
         this.length = 80;
