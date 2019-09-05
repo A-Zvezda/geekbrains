@@ -1,37 +1,36 @@
 package race.track;
 
 
-import race.Main;
+import race.StartRace;
 import race.participant.*;
 
 public class Tunnel extends Stage {
-    public Tunnel() {
+    private StartRace controller;
+    public Tunnel(StartRace controller) {
         this.length = 80;
         this.description = "Тоннель " + length + " метров";
+        this.controller = controller;
     }
     @Override
     public void go(Car c) {
         try {
             try {
                 System.out.println(c.getName() + " готовится к этапу(ждет): " + description);
-                Main.SEMAPHORE.acquire();
-
+                controller.SEMAPHORE.acquire();
                     int capacityNumber = -1;
-
-                    //Ищем свободное место и паркуемся
-                    synchronized (Main.TUNNEL_CAPACITY){
-                        for (int i = 0; i < Main.TUNNEL_CAPACITY.length; i++)
-                            if (!Main.TUNNEL_CAPACITY[i]) {      //Если место свободно
-                                Main.TUNNEL_CAPACITY[i] = true;  //занимаем его
-                                capacityNumber = i;         //Наличие свободного места, гарантирует семафор
+                    synchronized (controller.TUNNEL_CAPACITY){
+                        for (int i = 0; i < controller.TUNNEL_CAPACITY.length; i++)
+                            if (!controller.TUNNEL_CAPACITY[i]) {
+                                controller.TUNNEL_CAPACITY[i] = true;
+                                capacityNumber = i;
                                 System.out.println(c.getName() + " начал этап: " + description);
                                 break;
                             }
-                        synchronized (Main.TUNNEL_CAPACITY) {
-                            Main.TUNNEL_CAPACITY[capacityNumber] = false;//Освобождаем место
+                        Thread.sleep(length / c.getSpeed() * 1000);
+                        synchronized (controller.TUNNEL_CAPACITY) {
+                            controller.TUNNEL_CAPACITY[capacityNumber] = false;
                         }
-
-                        Main.SEMAPHORE.release();
+                        controller.SEMAPHORE.release();
 
                     }
 
