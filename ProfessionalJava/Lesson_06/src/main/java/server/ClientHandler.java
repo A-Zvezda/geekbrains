@@ -103,7 +103,7 @@ public class ClientHandler implements Runnable{
                     if (str.equals("/end")) {
                         out.writeUTF("/serverclosed");
                         System.out.println("Клиент отклюился");
-                        StartServer.LOGGER.info("Info: {}.", "Клиент отклюился");
+                        server.LOGGER.info("Info: {}.", "Клиент отклюился");
                         break;
                     }
                     if (str.startsWith("/w ")) { // /w nick3 lsdfhldf sdkfjhsdf wkerhwr
