@@ -296,7 +296,7 @@ public class Controller {
     }
 
     private void saveHistory(String message) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("/" + myNick + ".txt", true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(  myNick + ".txt", true))) {
                 writer.write(message+"\n");
         } catch (IOException e) {
             e.printStackTrace();
@@ -305,7 +305,7 @@ public class Controller {
 
     private void loadHistory() {
         int lineCount = 100;
-        File file = new File("" + myNick + ".txt");
+        File file = new File(myNick + ".txt");
         if (!file.exists()) {
             return;
         }
