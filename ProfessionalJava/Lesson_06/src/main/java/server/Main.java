@@ -11,6 +11,10 @@ import java.util.Vector;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 public class Main {
     private Vector<ClientHandler> clients;
@@ -26,25 +30,29 @@ public class Main {
 //            System.out.println(str);
             server = new ServerSocket(8189);
             System.out.println("Сервер запущен");
-
+            StartServer.LOGGER.info("Info: {}.", "Сервер запущен");
             while (true) {
                 socket = server.accept();
                 System.out.println("Клиент подключился");
+                StartServer.LOGGER.info("Info: {}.", "Клиент подключился");
                 ExecutorService executorService = Executors.newFixedThreadPool(10);
                 executorService.execute( new ClientHandler(socket, this));
             }
 
         } catch (IOException e) {
+            StartServer.LOGGER.error("Error: {}.", e);
             e.printStackTrace();
         } finally {
             try {
                 socket.close();
             } catch (IOException e) {
+                StartServer.LOGGER.error("Error: {}.", e);
                 e.printStackTrace();
             }
             try {
                 server.close();
             } catch (IOException e) {
+                StartServer.LOGGER.error("Error: {}.", e);
                 e.printStackTrace();
             }
             AuthService.disconnect();

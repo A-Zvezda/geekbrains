@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="TestJUnitTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2019-09-09T08:56:55" hostname="knote016" time="0.012">
+  <properties/>
+  <testcase name="testOneAndFourArray" classname="TestJUnitTest" time="0.01"/>
+  <testcase name="testTrimArray" classname="TestJUnitTest" time="0.002"/>
+  <testcase name="testTrimArrayException" classname="TestJUnitTest" time="0.0"/>
+  <system-out><![CDATA[1
+1
+1
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

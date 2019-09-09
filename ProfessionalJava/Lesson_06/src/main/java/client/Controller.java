@@ -1,6 +1,6 @@
 package client;
 
-import com.sun.org.apache.xml.internal.security.Init;
+//import com.sun.org.apache.xml.internal.security.Init;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -296,7 +296,7 @@ public class Controller {
     }
 
     private void saveHistory(String message) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("res/" + myNick + ".txt", true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("/" + myNick + ".txt", true))) {
                 writer.write(message+"\n");
         } catch (IOException e) {
             e.printStackTrace();
@@ -305,12 +305,12 @@ public class Controller {
 
     private void loadHistory() {
         int lineCount = 100;
-        File file = new File("res/" + myNick + ".txt");
+        File file = new File("" + myNick + ".txt");
         if (!file.exists()) {
             return;
         }
         StringBuilder builder = new StringBuilder();
-        try (RandomAccessFile randomAccessFile = new RandomAccessFile("res/" + myNick + ".txt", "r")) {
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile("/" + myNick + ".txt", "r")) {
             long position = file.length() - 1;
             randomAccessFile.seek(position);
             for (long i = position - 1; i >= 0; i--) {
