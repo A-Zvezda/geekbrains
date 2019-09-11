@@ -1,11 +1,12 @@
 package race.participant;
 
 import race.track.*;
-import race.Main;
+import race.StartRace;
 
 
 public class Car implements Runnable {
     private static int CARS_COUNT;
+    private StartRace controller;
     static {
         CARS_COUNT = 0;
     }
@@ -19,11 +20,11 @@ public class Car implements Runnable {
     public int getSpeed() {
         return speed;
     }
-    public Car(Race race, int speed) {
+    public Car(Race race, int speed, StartRace controller) {
         this.race = race;
         this.speed = speed;
         CARS_COUNT++;
-        //this.START = START;
+        this.controller = controller;
         this.name = "Участник #" + CARS_COUNT;
     }
     @Override
@@ -32,19 +33,17 @@ public class Car implements Runnable {
             System.out.println(this.name + " готовится");
             Thread.sleep(500 + (int)(Math.random() * 800));
             System.out.println(this.name + " готов");
-            Main.START.countDown();
-            Main.START.await();
+            controller.START.countDown();
+            controller.START.await();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //System.out.println(Main.START.getCount());
         try {
             for (int i = 0; i < race.getStages().size(); i++) {
                 race.getStages().get(i).go(this);
-                //Main.FINISH.countDown();
             }
         } finally {
-            Main.FINISH.countDown();
+            controller.FINISH.countDown();
         }
     }
 }
