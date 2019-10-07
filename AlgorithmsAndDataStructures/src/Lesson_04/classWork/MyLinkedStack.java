@@ -1,18 +1,16 @@
-package Lesson_04.homeWork;
+package Lesson_04.classWork;
 
-
-
-public class MyLinkedQuery<T> {
+public class MyLinkedStack<T> {
     private MyLinkedList<T> stack = new MyLinkedList<>();
 
     public void push(T value){
         stack.insertFirst(value);
     }
     public T pop(){
-        return stack.removeLast();
+        return stack.removeFirst();
     }
     public T peek(){
-        return stack.getLast();
+        return stack.getFirst();
     }
 
     public int size(){
@@ -21,9 +19,5 @@ public class MyLinkedQuery<T> {
 
     public boolean isEmpty(){
         return stack.isEmpty();
-    }
-    @Override
-    public String toString() {
-        return  stack.toString();
     }
 }

@@ -1,58 +1,19 @@
-package Lesson_04.homeWork;
+package Lesson_04.classWork;
 
-import java.util.Iterator;
-
-public class MyLinkedList<Item> implements Iterable<Item> {
+public class MyOneLinkedList<Item> {
     private Node first;
-    private Node last;
     private int size = 0;
 
-    public MyLinkedList() {
+    public MyOneLinkedList() {
         first = null;
-        last = null;
-    }
-
-    @Override
-    public Iterator<Item> iterator() {
-        return new Iter(this);
-    }
-
-    private class Iter implements Iterator<Item>{
-        Node current = new Node(null,first);
-        MyLinkedList myList;
-        public Iter (MyLinkedList<Item> myList) {
-            this.myList = myList;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return current.getNext() != null;
-        }
-
-        @Override
-        public Item next() {
-            current = current.next;
-            return (Item) current.getValue();
-        }
-
-        @Override
-        public void remove() {
-            myList.remove((Item) current.getValue());
-        }
     }
 
     class Node<Item> {
         private Item value;
         private Node next;
-        private Node previous;
 
         public Node(Item value) {
             this.value = value;
-        }
-
-        public Node(Item value, Node next) {
-            this.value = value;
-            this.next = next;
         }
 
         public Item getValue() {
@@ -71,18 +32,9 @@ public class MyLinkedList<Item> implements Iterable<Item> {
             this.next = next;
         }
 
-        public Node getPrevious() {
-            return previous;
-        }
-
-        public void setPrevious(Node previous) {
-            this.previous = previous;
-        }
-
         @Override
         public String toString() {
             return value.toString();
-
         }
     }
 
@@ -90,11 +42,6 @@ public class MyLinkedList<Item> implements Iterable<Item> {
     public void insertFirst(Item item) {
         Node newNode = new Node(item);
         newNode.setNext(first);
-        if (isEmpty()) {
-            last = newNode;
-        } else {
-            first.setPrevious(newNode);
-        }
         first = newNode;
         size++;
     }
@@ -104,41 +51,9 @@ public class MyLinkedList<Item> implements Iterable<Item> {
             return null;
         }
         Node oldFirst = first;
-        first = first.next;
+        first = first.getNext();
         size--;
-        if (isEmpty()) {
-            last = null;
-        } else {
-            first.setPrevious(null);
-        }
         return (Item) oldFirst.getValue();
-    }
-
-    public void insertLast(Item item) {
-        Node newNode = new Node(item);
-        if (isEmpty()) {
-            first = newNode;
-        } else {
-            newNode.setPrevious(last);
-            last.setNext(newNode);
-        }
-        last = newNode;
-        size++;
-    }
-
-    public Item removeLast() {
-        if (isEmpty()) {
-            return null;
-        }
-        Node oldLast = last;
-        if (last.getPrevious() != null) {
-            last.getPrevious().setNext(null);
-        } else {
-            first = null;
-        }
-        size--;
-        last = last.getPrevious();
-        return (Item) oldLast.getValue();
     }
 
     public void insert(Item item, int index) {
@@ -157,9 +72,7 @@ public class MyLinkedList<Item> implements Iterable<Item> {
         }
         Node newNode = new Node(item);
         newNode.setNext(current.next);
-        newNode.setPrevious(current);
         current.setNext(newNode);
-        newNode.getNext().setPrevious(newNode);
         size++;
     }
 
@@ -172,19 +85,14 @@ public class MyLinkedList<Item> implements Iterable<Item> {
             return true;
         }
         Node current = first;
-        while (current != null &&
-                !current.getValue().equals(item)) {
+        while (current.next != null &&
+                !current.next.getValue().equals(item)) {
             current = current.next;
         }
-        if (current == null) {
+        if (current.next == null) {
             return false;
         }
-        if(current == last){
-            removeLast();
-            return true;
-        }
-        current.getNext().setPrevious(current.previous);
-        current.getPrevious().setNext(current.next);
+        current.setNext(current.next.next);
         size--;
         return true;
     }
@@ -213,13 +121,6 @@ public class MyLinkedList<Item> implements Iterable<Item> {
         return (Item) first.value;
     }
 
-    public Item getLast() {
-        if (isEmpty()) {
-            return null;
-        }
-        return (Item) last.value;
-    }
-
     public boolean isEmpty() {
         return first == null;
     }
@@ -236,8 +137,6 @@ public class MyLinkedList<Item> implements Iterable<Item> {
             sb.append(current.getValue() + ", ");
             current = current.next;
         }
-
         return sb.toString();
     }
-
 }

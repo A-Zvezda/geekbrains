@@ -1,4 +1,4 @@
-package Lesson_04.homeWork;
+package Lesson_04.classWork;
 
 import java.util.Iterator;
 
@@ -14,16 +14,11 @@ public class MyLinkedList<Item> implements Iterable<Item> {
 
     @Override
     public Iterator<Item> iterator() {
-        return new Iter(this);
+        return new Iter();
     }
 
     private class Iter implements Iterator<Item>{
         Node current = new Node(null,first);
-        MyLinkedList myList;
-        public Iter (MyLinkedList<Item> myList) {
-            this.myList = myList;
-        }
-
         @Override
         public boolean hasNext() {
             return current.getNext() != null;
@@ -33,11 +28,6 @@ public class MyLinkedList<Item> implements Iterable<Item> {
         public Item next() {
             current = current.next;
             return (Item) current.getValue();
-        }
-
-        @Override
-        public void remove() {
-            myList.remove((Item) current.getValue());
         }
     }
 
@@ -82,7 +72,6 @@ public class MyLinkedList<Item> implements Iterable<Item> {
         @Override
         public String toString() {
             return value.toString();
-
         }
     }
 
@@ -236,8 +225,6 @@ public class MyLinkedList<Item> implements Iterable<Item> {
             sb.append(current.getValue() + ", ");
             current = current.next;
         }
-
         return sb.toString();
     }
-
 }
