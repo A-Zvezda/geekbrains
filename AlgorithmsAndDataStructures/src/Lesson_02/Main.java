@@ -1,4 +1,5 @@
-import java.lang.reflect.Array;
+package Lesson_02;
+
 import java.util.Arrays;
 import java.util.Random;
 
