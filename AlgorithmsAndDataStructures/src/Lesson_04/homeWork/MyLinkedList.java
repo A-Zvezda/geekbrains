@@ -1,6 +1,7 @@
 package Lesson_04.homeWork;
 
 import java.util.Iterator;
+import java.util.ListIterator;
 
 public class MyLinkedList<Item> implements Iterable<Item> {
     private Node first;
@@ -12,15 +13,19 @@ public class MyLinkedList<Item> implements Iterable<Item> {
         last = null;
     }
 
-    @Override
-    public Iterator<Item> iterator() {
-        return new Iter(this);
-    }
+//    @Override
+//    public Iterator<Item> iterator() {
+//        return new MyIterator(this);
+//    }
 
-    private class Iter implements Iterator<Item>{
+    @Override
+    public ListIterator<Item> iterator() {
+        return new MyListIterator(this);
+    }
+    private class MyIterator implements Iterator<Item>{
         Node current = new Node(null,first);
         MyLinkedList myList;
-        public Iter (MyLinkedList<Item> myList) {
+        public MyIterator (MyLinkedList<Item> myList) {
             this.myList = myList;
         }
 
@@ -41,6 +46,69 @@ public class MyLinkedList<Item> implements Iterable<Item> {
         }
     }
 
+    private class MyListIterator implements ListIterator<Item> {
+        Node current = new Node(null,first);
+        MyLinkedList myList;
+        boolean firstSent = false;
+        public MyListIterator (MyLinkedList<Item> myList) {
+            this.myList = myList;
+        }
+        @Override
+        public boolean hasNext() {
+            return current.getNext() != null;
+        }
+
+        @Override
+        public Item next() {
+            current = current.next;
+            firstSent = false;
+            return (Item) current.getValue();
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            if (first == current & !firstSent) {
+                firstSent = true;
+                return true;
+            } else if (null == current & firstSent) {
+                return false;
+            }
+            return current.getPrevious() != null;
+        }
+
+        @Override
+        public Item previous() {
+            Item item = (Item) current.getValue();
+            item =  (Item) current.getValue();
+            current = current.previous;
+            return item;
+        }
+
+        @Override
+        public int nextIndex() {
+            return myList.indexOf(current.next.getValue());
+        }
+
+        @Override
+        public int previousIndex() {
+            return myList.indexOf(current.previous.getValue());
+        }
+
+        @Override
+        public void remove() {
+            myList.remove((Item) current.getValue());
+        }
+
+        @Override
+        public void set(Item item) {
+            current.setValue(item);
+        }
+
+        @Override
+        public void add(Item item) {
+            myList.insert(item, myList.indexOf(current.getValue()) );
+        }
+    }
     class Node<Item> {
         private Item value;
         private Node next;

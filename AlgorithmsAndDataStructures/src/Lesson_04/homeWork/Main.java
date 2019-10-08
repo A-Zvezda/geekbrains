@@ -1,6 +1,7 @@
 package Lesson_04.homeWork;
 
 import java.util.Iterator;
+import java.util.ListIterator;
 
 public class Main {
     public static void main(String[] args) {
@@ -25,13 +26,22 @@ public class Main {
 
         mll.insertLast("Petia");
         System.out.println(mll);
-        Iterator<String> iterator = mll.iterator();
+        ListIterator<String> iterator = mll.iterator();
         while(iterator.hasNext()){
             System.out.print(iterator.next()+" ");
-            iterator.remove();
+            //iterator.remove();
         }
         System.out.println();
+        //int i = 0;
+        while(iterator.hasPrevious()){
+            iterator.remove();
+            System.out.print(iterator.previous()+" ");
+
+        }
+
+        System.out.println();
         System.out.println("After remove is Empty: " + mll.isEmpty());
+        System.out.println(mll);
 
 
     }
