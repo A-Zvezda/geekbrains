@@ -17,7 +17,7 @@ public class Main {
         for(int i = 0; i < count;i++) {
             myTreeMaps.add(new MyTreeMap<>());
             mtm = myTreeMaps.get(i);
-            while (mtm.maxDepth(mtm.root) <= 6) {
+            while (mtm.maxHeight(mtm.root) <= 6) {
                 rand = random.nextInt(100)-100;
                 mtm.put(rand, rand);
             }

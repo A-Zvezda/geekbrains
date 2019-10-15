@@ -60,10 +60,10 @@ public class MyTreeMap<Key extends Comparable<Key>, Value> {
             return true;
         } 
 
-        Height lheight = new Height(), rheight = new Height(); 
-        boolean l = isBalanced(root.left, lheight); 
-        boolean r = isBalanced(root.right, rheight); 
-        int lh = lheight.height, rh = rheight.height;
+        Height lHeight = new Height(), rHeight = new Height();
+        boolean l = isBalanced(root.left, lHeight);
+        boolean r = isBalanced(root.right, rHeight);
+        int lh = lHeight.height, rh = rHeight.height;
         height.height = (Math.max(lh, rh)) + 1;
 
         if ((lh - rh >= 2) || (rh - lh >= 2)) {
@@ -92,17 +92,17 @@ public class MyTreeMap<Key extends Comparable<Key>, Value> {
         return get(root, key);
     }
 
-    int maxDepth(Node node) {
+    int maxHeight(Node node) {
         if (node == null) {
             return 0;
         } else {
-            int lDepth = maxDepth(node.left);
-            int rDepth = maxDepth(node.right);
+            int lHeight = maxHeight(node.left);
+            int rHeight= maxHeight(node.right);
 
-            if (lDepth > rDepth)
-                return (lDepth + 1);
+            if (lHeight > rHeight)
+                return (lHeight + 1);
             else
-                return (rDepth + 1);
+                return (rHeight + 1);
         }
     }
 
