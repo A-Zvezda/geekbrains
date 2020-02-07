@@ -1,49 +1,33 @@
 package race.participant;
 
-import race.track.*;
-import race.StartRace;
+import race.Race;
 
+public class Car extends Thread {
+    private static int CARS_COUNT = 0;
 
-public class Car implements Runnable {
-    private static int CARS_COUNT;
-    private StartRace controller;
-    static {
-        CARS_COUNT = 0;
-    }
     private Race race;
     private int speed;
-    private String name;
 
-    public String getName() {
-        return name;
-    }
+
     public int getSpeed() {
         return speed;
     }
-    public Car(Race race, int speed, StartRace controller) {
+    public Car(Race race, int speed) {
         this.race = race;
         this.speed = speed;
         CARS_COUNT++;
-        this.controller = controller;
-        this.name = "Участник #" + CARS_COUNT;
+        setName("Участник №" + ++CARS_COUNT);
+        //    this.name = "Участник #" + CARS_COUNT;
     }
     @Override
     public void run() {
         try {
-            System.out.println(this.name + " готовится");
-            Thread.sleep(500 + (int)(Math.random() * 800));
-            System.out.println(this.name + " готов");
-            controller.START.countDown();
-            controller.START.await();
+            race.start(getName());
+            race.getStages().forEach(stage -> stage.go(this));
+            race.finish(getName());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try {
-            for (int i = 0; i < race.getStages().size(); i++) {
-                race.getStages().get(i).go(this);
-            }
-        } finally {
-            controller.FINISH.countDown();
-        }
+
     }
 }

@@ -1,6 +1,6 @@
 package race.track;
 
-import race.Main;
+
 import race.participant.*;
 
 public abstract class Stage {
